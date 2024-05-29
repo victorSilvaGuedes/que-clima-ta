@@ -1,14 +1,16 @@
 import type { Metadata } from 'next'
-import { Nunito } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/header'
 import { ThemeProvider } from '@/provider/theme-provider'
+import { GlobalContextProvider } from '@/context/global-context'
+import { Separator } from '@/components/ui/separator'
 
-const nunito = Nunito({
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-nunito',
-  weight: ['200', '300', '400', '700', '900'],
+  variable: '--font-inter',
+  weight: ['100', '300', '400', '700', '900'],
 })
 
 export const metadata: Metadata = {
@@ -22,17 +24,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={nunito.variable}>
-      <body className="font-nunito antialiased mx-4 lg:mx-8 xl:mx-24 2xl:mx-64">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
-          {children}
-        </ThemeProvider>
+    <html lang="en" className={inter.variable}>
+      <body className="font-inter antialiased mx-4 lg:mx-8 xl:mx-24 2xl:mx-64">
+        <GlobalContextProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <div className="-mx-4 lg:-mx-8 xl:-mx-24 2xl:-mx-64">
+              <Separator className="mb-4" />
+            </div>
+            {children}
+          </ThemeProvider>
+        </GlobalContextProvider>
       </body>
     </html>
   )

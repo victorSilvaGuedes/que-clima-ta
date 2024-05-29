@@ -6,7 +6,7 @@ import { Command, CommandGroup, CommandInput } from '../ui/command'
 
 export function Header() {
   return (
-    <header className="flex w-full py-4 items-center justify-between gap-2">
+    <header className="flex w-full py-4 items-center justify-between gap-2 flex-col md:flex-row">
       <div className="flex gap-2 items-center">
         <ToggleThemeButton />
 

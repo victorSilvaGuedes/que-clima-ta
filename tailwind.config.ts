@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        nunito: 'var(--font-nunito)',
+        inter: 'var(--font-inter)',
       },
       colors: {
         border: 'hsl(var(--border))',
