@@ -1,6 +1,13 @@
 import { Github, Search } from 'lucide-react'
 import { Button } from '../ui/button'
-import { Command, CommandGroup, CommandInput } from '../ui/command'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '../ui/command'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 import { ToggleThemeButton } from '../ui/toggle-theme-button'
 import {
@@ -55,9 +62,16 @@ export function Header() {
           </Button>
         </DialogTrigger>
         <DialogContent className="p-0">
-          <Command>
+          <Command className="rounded-lg border shadow-md">
             <CommandInput placeholder="Busque a cidade..." />
-            <CommandGroup heading="Sugestões"></CommandGroup>
+            <CommandList>
+              <CommandEmpty>0 resultados encontrados.</CommandEmpty>
+              <CommandGroup heading="Sugestões">
+                <CommandItem>abc</CommandItem>
+                <CommandItem>def</CommandItem>
+                <CommandItem>ghi</CommandItem>
+              </CommandGroup>
+            </CommandList>
           </Command>
         </DialogContent>
       </Dialog>

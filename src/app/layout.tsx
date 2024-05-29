@@ -1,10 +1,10 @@
+import { Header } from '@/components/header'
+import { Separator } from '@/components/ui/separator'
+import { GlobalContextProvider } from '@/context/global-context'
+import { ThemeProvider } from '@/provider/theme-provider'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Header } from '@/components/header'
-import { ThemeProvider } from '@/provider/theme-provider'
-import { GlobalContextProvider } from '@/context/global-context'
-import { Separator } from '@/components/ui/separator'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,7 +35,7 @@ export default function RootLayout({
           >
             <Header />
             <div className="-mx-4 lg:-mx-8 xl:-mx-24 2xl:-mx-64">
-              <Separator className="mb-4" />
+              <Separator />
             </div>
             {children}
           </ThemeProvider>
