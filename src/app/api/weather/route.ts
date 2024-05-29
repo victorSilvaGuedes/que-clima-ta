@@ -8,8 +8,8 @@ export function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl
     console.log(searchParams)
 
-    const lat = -20.8713
-    const lon = -48.2993
+    const lat = -23.5489
+    const lon = -46.6388
 
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=pt_br&appid=${apiKey}`
 

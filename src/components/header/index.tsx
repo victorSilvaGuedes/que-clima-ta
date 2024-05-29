@@ -1,8 +1,8 @@
 import { Github, Search } from 'lucide-react'
 import { Button } from '../ui/button'
-import { ToggleThemeButton } from '../ui/toggle-theme-button'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 import { Command, CommandGroup, CommandInput } from '../ui/command'
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
+import { ToggleThemeButton } from '../ui/toggle-theme-button'
 
 export function Header() {
   return (
@@ -15,7 +15,7 @@ export function Header() {
           Repositório
         </Button>
       </div>
-      <h1 className="text-3xl font-semibold tracking-wide">que clima tá</h1>
+      <h1 className="text-3xl font-semibold tracking-wide">que clima tá?</h1>
       <Dialog>
         <DialogTrigger asChild>
           <Button

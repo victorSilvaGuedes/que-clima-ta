@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react'
+} from 'react';
 
 interface ForecastType {
   main: { temp: number; temp_min: number; temp_max: number; feels_like: number }
