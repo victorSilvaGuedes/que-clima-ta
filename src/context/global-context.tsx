@@ -32,7 +32,6 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
     try {
       const response = await fetch('api/weather')
       const data = await response.json()
-      console.log(data)
 
       setForecast(data)
     } catch (error) {
