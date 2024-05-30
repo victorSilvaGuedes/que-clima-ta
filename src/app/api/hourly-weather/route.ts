@@ -12,7 +12,7 @@ export function GET(request: NextRequest) {
 
     return fetch(url, {
       next: {
-        revalidate: 60 * 60,
+        revalidate: 60 * 30,
       },
     })
   } catch (error) {
