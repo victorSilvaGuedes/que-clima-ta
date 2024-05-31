@@ -4,6 +4,7 @@ import { Humidity } from '@/components/humidity'
 import { Pressure } from '@/components/pressure'
 import { SunsetSunrise } from '@/components/sunset-sunrise'
 import { Temperature } from '@/components/temperature'
+import { Wind } from '@/components/wind'
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         <Humidity className="col-span-1 lg:col-span-2" />
         <Pressure className="col-span-1 lg:col-span-2" />
       </div>
+      <Wind />
     </main>
   )
 }

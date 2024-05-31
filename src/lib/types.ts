@@ -25,6 +25,9 @@ interface Wind {
   speed: number
   deg: number
   gust: number
+  direction: string[]
+  speedClassification: string
+  gustClassification: string
 }
 
 interface Sys {

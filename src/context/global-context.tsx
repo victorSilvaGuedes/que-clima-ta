@@ -2,8 +2,10 @@
 import { getIcon } from '@/lib/get-icon'
 import { AirPollutionType, ForecastType, HourlyWeatherType } from '@/lib/types'
 import {
+  classifyWindSpeed,
   getHoursAndMinutes,
   getHumidityDescription,
+  getWindDirection,
   transformDateAndHours,
 } from '@/lib/utils'
 import { CloudSun } from 'lucide-react'
@@ -28,7 +30,14 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
     coord: { lat: 0, lon: 0 },
     clouds: { all: 0 },
     icon: <CloudSun size={40} />,
-    wind: { speed: 0, deg: 0, gust: 0 },
+    wind: {
+      speed: 0,
+      deg: 0,
+      gust: 0,
+      direction: [],
+      speedClassification: '',
+      gustClassification: '',
+    },
     visibility: 0,
     main: {
       temp: 0,
@@ -55,7 +64,14 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
         clouds: { all: 0 },
 
         visibility: 0,
-        wind: { speed: 0, deg: 0, gust: 0 },
+        wind: {
+          speed: 0,
+          deg: 0,
+          gust: 0,
+          direction: [],
+          speedClassification: '',
+          gustClassification: '',
+        },
         main: {
           temp: 0,
           temp_min: 0,
@@ -101,6 +117,12 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
 
       const processData: ForecastType = {
         ...data,
+        wind: {
+          ...data.wind,
+          direction: getWindDirection(data.wind.deg),
+          gustClassification: classifyWindSpeed(data.wind.gust),
+          speedClassification: classifyWindSpeed(data.wind.speed),
+        },
         main: {
           ...data.main,
           humidityDescription: getHumidityDescription(data.main.humidity),

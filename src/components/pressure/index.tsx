@@ -1,7 +1,7 @@
 'use client'
 import { useGlobalContext } from '@/context/global-context'
 import { cn } from '@/lib/utils'
-import { Gauge } from 'lucide-react'
+import { CircleGauge } from 'lucide-react'
 import { Box } from '../box'
 
 interface PressureProps {
@@ -14,7 +14,7 @@ export function Pressure({ className }: PressureProps) {
   return (
     <Box className={cn('flex flex-col gap-4 justify-between', className)}>
       <div className="flex items-center gap-2">
-        <Gauge />
+        <CircleGauge />
         <p className="font-semibold text-xl">Pressão atmosférica</p>
       </div>
       <p className="text-center text-3xl">{forecast.main.pressure} hPa</p>
