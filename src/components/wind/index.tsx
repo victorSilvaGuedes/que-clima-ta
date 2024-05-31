@@ -62,7 +62,7 @@ export function Wind({ className }: WindProps) {
                 height: '100%',
               }}
             />
-            <p className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-sm">
+            <p className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-xs">
               {forecast.wind.direction[0]}
             </p>
           </div>
