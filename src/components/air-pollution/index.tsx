@@ -19,7 +19,7 @@ export function AirPollution({ className }: AirPollutionProps) {
         <p className="font-semibold text-xl">Poluição do ar</p>
       </div>
       <Progress value={airPollution.list[0].main.aqi} />
-      <p>A qualidade do ar é {airPollution.list[0].main.description}</p>
+      <p>A qualidade do ar está {airPollution.list[0].main.description}</p>
     </Box>
   )
 }
