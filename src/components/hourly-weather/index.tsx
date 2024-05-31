@@ -1,28 +1,29 @@
 'use client'
 import { useGlobalContext } from '@/context/global-context'
+import { cn } from '@/lib/utils'
 import { Clock } from 'lucide-react'
 import { Box } from '../box'
 
-export function HourlyWeather() {
+interface HourlyWeatherProps {
+  className?: string
+}
+
+export function HourlyWeather({ className }: HourlyWeatherProps) {
   const { hourlyWeather } = useGlobalContext()
 
   return (
-    <Box className="flex flex-col">
+    <Box className={cn('flex flex-col h-full w-full', className)}>
       <div className="flex items-center gap-2">
         <Clock />
         <p className="text-xl font-semibold">Previsão horária</p>
       </div>
-      <div className="text-lg grid grid-cols-1 gap-8 mt-10 md:grid-cols-2 md:mt-4 lg:grid-cols-3">
+      <div className="text-lg grid grid-cols-1 gap-8 sm:grid-cols-2 mt-4 md:grid-cols-3">
         {hourlyWeather.list.map((item) => {
           return (
-            <div key={item.dt} className="flex items-center flex-col gap-2">
-              <div className="flex gap-1">
-                <p>{item.date}</p>
-                <p>-</p>
-                <p>{item.hour}:00</p>
-              </div>
-              {item.icon}
-              <p>{item.main.temp}</p>
+            <div key={item.dt_txt} className="flex items-center flex-col gap-2">
+              <p>{item.dt_txt}</p>
+              <span>{item.icon}</span>
+              <p>{item.main.temp} °C</p>
             </div>
           )
         })}

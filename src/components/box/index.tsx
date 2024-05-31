@@ -7,6 +7,8 @@ interface BoxProps {
 
 export function Box({ children, className }: BoxProps) {
   return (
-    <div className={cn('border p-4 rounded-md', className)}>{children}</div>
+    <div className={cn('border p-4 rounded-md shadow', className)}>
+      {children}
+    </div>
   )
 }

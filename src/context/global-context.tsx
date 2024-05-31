@@ -1,5 +1,11 @@
 'use client'
 import { getIcon } from '@/lib/get-icon'
+import { AirPollutionType, ForecastType, HourlyWeatherType } from '@/lib/types'
+import {
+  getHoursAndMinutes,
+  getHumidityDescription,
+  transformDateAndHours,
+} from '@/lib/utils'
 import { CloudSun } from 'lucide-react'
 import {
   ReactNode,
@@ -9,54 +15,30 @@ import {
   useState,
 } from 'react'
 
-interface Main {
-  temp: number
-  temp_min: number
-  temp_max: number
-  feels_like: number
-}
-
-interface Weather {
-  main: string
-  description: string
-}
-
-interface ForecastType {
-  main: Main
-  weather: Weather[]
-  timezone: number
-  name: string
-  sys: {
-    sunrise: number
-    sunset: number
-  }
-  sunriseFormatted: string
-  sunsetFormatted: string
-}
-
-interface WeatherItem {
-  dt: number
-  main: Main
-  weather: Weather[]
-  icon: JSX.Element
-  hour: number
-  date: string
-}
-
-interface HourlyWeatherType {
-  list: WeatherItem[]
-}
-
 interface GlobalContextType {
   forecast: ForecastType
   hourlyWeather: HourlyWeatherType
+  airPollution: AirPollutionType
 }
 
 const GlobalContext = createContext({} as GlobalContextType)
 
 export function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [forecast, setForecast] = useState<ForecastType>({
-    main: { temp: 0, temp_min: 0, temp_max: 0, feels_like: 0 },
+    coord: { lat: 0, lon: 0 },
+    clouds: { all: 0 },
+    icon: <CloudSun size={40} />,
+    wind: { speed: 0, deg: 0, gust: 0 },
+    visibility: 0,
+    main: {
+      temp: 0,
+      temp_min: 0,
+      temp_max: 0,
+      feels_like: 0,
+      humidity: 0,
+      humidityDescription: '',
+      pressure: 0,
+    },
     timezone: 0,
     name: '',
     weather: [{ main: '', description: '' }],
@@ -70,17 +52,39 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [hourlyWeather, setHourlyWeather] = useState<HourlyWeatherType>({
     list: [
       {
-        dt: 0,
+        clouds: { all: 0 },
+
+        visibility: 0,
+        wind: { speed: 0, deg: 0, gust: 0 },
         main: {
           temp: 0,
           temp_min: 0,
           temp_max: 0,
           feels_like: 0,
+          humidity: 0,
+          humidityDescription: '',
+          pressure: 0,
         },
         weather: [{ main: '', description: '' }],
-        date: '',
-        hour: 0,
+        dt_txt: '',
         icon: <CloudSun size={40} />,
+      },
+    ],
+  })
+  const [airPollution, setAirPollution] = useState<AirPollutionType>({
+    list: [
+      {
+        main: { aqi: 0, description: '' },
+        components: {
+          co: 0,
+          no: 0,
+          no2: 0,
+          o3: 0,
+          so2: 0,
+          pm2_5: 0,
+          pm10: 0,
+          nh3: 0,
+        },
       },
     ],
   })
@@ -90,19 +94,20 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
       const response = await fetch('api/weather')
       const data: ForecastType = await response.json()
 
-      const sunriseTime = new Date(data.sys.sunrise * 1000)
-      const sunsetTime = new Date(data.sys.sunset * 1000)
+      const sunriseFormatted = getHoursAndMinutes(data.sys.sunrise)
+      const sunsetFormatted = getHoursAndMinutes(data.sys.sunset)
 
-      const sunriseHours = sunriseTime.getUTCHours()
-      const sunriseMinutes = sunriseTime.getUTCMinutes()
-
-      const sunsetHours = sunsetTime.getUTCHours()
-      const sunsetMinutes = sunsetTime.getUTCMinutes()
+      const icon = getIcon(data.weather[0].main)
 
       const processData: ForecastType = {
         ...data,
-        sunriseFormatted: `${sunriseHours}:${String(sunriseMinutes).padStart(2, '0')}`,
-        sunsetFormatted: `${sunsetHours}:${String(sunsetMinutes).padStart(2, '0')}`,
+        main: {
+          ...data.main,
+          humidityDescription: getHumidityDescription(data.main.humidity),
+        },
+        icon,
+        sunriseFormatted,
+        sunsetFormatted,
       }
 
       setForecast(processData)
@@ -118,13 +123,10 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
 
       const processData: HourlyWeatherType = {
         list: data.list.map((item) => {
-          const date = new Date(item.dt * 1000)
-
           return {
             ...item,
             icon: getIcon(item.weather[0].main),
-            hour: date.getHours(),
-            date: `${date.getDate()}/${date.getMonth() + 1}`,
+            dt_txt: transformDateAndHours(item.dt_txt),
           }
         }),
       }
@@ -135,13 +137,44 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function fetchAirPollution() {
+    try {
+      const response = await fetch('api/air-pollution')
+      const data: AirPollutionType = await response.json()
+
+      const pollutionValues = [20, 40, 60, 80, 100]
+      const pollutionDescriptions = [
+        'boa',
+        'razoável',
+        'moderada',
+        'ruim',
+        'muito ruim',
+      ]
+      const processData: AirPollutionType = {
+        list: [
+          {
+            main: {
+              aqi: pollutionValues[data.list[0].main.aqi - 1],
+              description: pollutionDescriptions[data.list[0].main.aqi - 1],
+            },
+            components: data.list[0].components,
+          },
+        ],
+      }
+      setAirPollution(processData)
+    } catch (error) {
+      console.error('Erro ao buscar as informações', error)
+    }
+  }
+
   useEffect(() => {
     fetchForecast()
     fetchHourlyWeather()
+    fetchAirPollution()
   }, [])
 
   return (
-    <GlobalContext.Provider value={{ forecast, hourlyWeather }}>
+    <GlobalContext.Provider value={{ forecast, hourlyWeather, airPollution }}>
       {children}
     </GlobalContext.Provider>
   )

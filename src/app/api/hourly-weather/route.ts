@@ -1,4 +1,4 @@
-import { env } from '@/env'
+import { env } from '@/lib/env'
 import { NextRequest } from 'next/server'
 
 export function GET(request: NextRequest) {
@@ -12,7 +12,7 @@ export function GET(request: NextRequest) {
 
     return fetch(url, {
       next: {
-        revalidate: 60 * 60,
+        revalidate: 60 * 30,
       },
     })
   } catch (error) {

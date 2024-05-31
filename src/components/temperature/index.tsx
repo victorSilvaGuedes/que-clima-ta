@@ -1,19 +1,21 @@
 'use client'
 
 import { useGlobalContext } from '@/context/global-context'
-import { getIcon } from '@/lib/get-icon'
+import { cn } from '@/lib/utils'
 import { Brain, MapPin, Minus, Plus } from 'lucide-react'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import { useEffect, useState } from 'react'
 import { Box } from '../box'
 
-export function Temperature() {
+interface TemperatureProps {
+  className?: string
+}
+
+export function Temperature({ className }: TemperatureProps) {
   const { forecast } = useGlobalContext()
   const [currentDay, setCurrentDay] = useState('')
   const [currentLocalTime, setCurrentLocalTime] = useState('')
-
-  const icon = getIcon(forecast.weather[0].main)
 
   useEffect(() => {
     function updateTime() {
@@ -36,7 +38,7 @@ export function Temperature() {
   }, [forecast.timezone])
 
   return (
-    <Box className="flex flex-col gap-4 h-full w-full">
+    <Box className={cn('flex flex-col gap-4 h-full w-full', className)}>
       <div className="flex items-center gap-2">
         <MapPin />
         <p className="font-semibold text-xl">{forecast.name}</p>
@@ -45,7 +47,7 @@ export function Temperature() {
         <p>{currentDay.charAt(0).toUpperCase() + currentDay.slice(1)}</p>
         <p>{currentLocalTime}</p>
       </div>
-      <p className="text-center text-7xl lg:text-8xl font-semibold mt-4">
+      <p className="text-center text-7xl font-semibold mt-4">
         {forecast.main.temp.toFixed(1)} °C
       </p>
       <div className="flex flex-col items-center justify-center">
@@ -72,7 +74,7 @@ export function Temperature() {
         </div>
       </div>
       <div className="flex gap-2 text-lg items-center">
-        <span>{icon}</span>
+        <span>{forecast.icon}</span>
         <p>
           {forecast.weather[0].description.charAt(0).toUpperCase() +
             forecast.weather[0].description.slice(1)}
