@@ -13,7 +13,11 @@ export function GET(request: NextRequest) {
 
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=pt_br&appid=${apiKey}`
 
-    return fetch(url)
+        return fetch(url, {
+      next: {
+        revalidate: 60 * 30,
+      },
+    })
   } catch (error) {
     console.error('Erro ao buscar as informações', error)
     return new Response('Erro ao buscar as informações', { status: 500 })
